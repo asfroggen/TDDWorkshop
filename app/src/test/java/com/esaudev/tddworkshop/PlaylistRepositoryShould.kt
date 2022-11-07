@@ -21,6 +21,7 @@ class PlaylistRepositoryShould: BaseUnitTest() {
 
     private val service: PlaylistService = mock()
     private val playlists = mock<List<Playlist>>()
+    private val exception = RuntimeException("Something went wrong")
 
     @Test
     fun `get playlists from service`() = runTest {
@@ -37,8 +38,26 @@ class PlaylistRepositoryShould: BaseUnitTest() {
     fun `emit playlist from service`() = runTest {
 
         val repository = mockSuccessfulCase()
-        advanceUntilIdle()
+
         assertEquals(playlists, repository.getPlaylists().first().getOrNull())
+    }
+
+    @Test
+    fun `propagate errors`() = runTest {
+        val repository = mockFailureCase()
+
+        assertEquals(exception, repository.getPlaylists().first().exceptionOrNull())
+    }
+
+    private suspend fun mockFailureCase(): PlaylistRepository {
+        whenever(service.fetchPlaylists()).thenReturn(
+            flow {
+                emit(Result.failure<List<Playlist>>(exception))
+            }
+        )
+
+        val repository = PlaylistRepository(service)
+        return repository
     }
 
     private suspend fun mockSuccessfulCase(): PlaylistRepository {

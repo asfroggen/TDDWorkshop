@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import com.esaudev.tddworkshop.R
+import com.esaudev.tddworkshop.data.PlaylistApi
 import com.esaudev.tddworkshop.data.PlaylistService
 import com.esaudev.tddworkshop.domain.PlaylistRepository
 import com.esaudev.tddworkshop.domain.model.Playlist
@@ -18,7 +19,7 @@ class PlaylistFragment : Fragment() {
 
     lateinit var viewModel: PlaylistViewModel
     lateinit var viewModelFactory: PlaylistViewModelFactory
-    private val service = PlaylistService()
+    private val service = PlaylistService(object : PlaylistApi {})
     private val repository = PlaylistRepository(service)
 
     override fun onCreateView(
