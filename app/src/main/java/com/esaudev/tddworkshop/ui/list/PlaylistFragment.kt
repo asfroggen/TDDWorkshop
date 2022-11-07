@@ -12,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.esaudev.tddworkshop.R
 import com.esaudev.tddworkshop.data.PlaylistApi
 import com.esaudev.tddworkshop.data.PlaylistService
@@ -49,12 +50,12 @@ class PlaylistFragment : Fragment() {
         }
 
         viewModel.playlists.observe(this as LifecycleOwner) { playlists ->
-            EspressoIdlingResource.decrement()
             if (playlists.getOrNull() != null) {
                 setupList(playlists.getOrNull()!!)
             } else {
                 // Handle the null
             }
+            EspressoIdlingResource.decrement()
         }
 
         return binding.root
@@ -65,16 +66,10 @@ class PlaylistFragment : Fragment() {
     ) {
         with(binding.playlistList) {
             layoutManager = LinearLayoutManager(context)
-            adapter = PlaylistListAdapter(playlists)
+            adapter = PlaylistListAdapter(playlists) { id ->
+                val action = PlaylistFragmentDirections.actionPlaylistFragmentToPlaylistDetailFragment(id)
+                findNavController().navigate(action)
+            }
         }
-    }
-
-    /*private fun setupViewModel() {
-        viewModel = ViewModelProvider(this, viewModelFactory)[PlaylistViewModel::class.java]
-    }*/
-
-    companion object {
-        @JvmStatic
-        fun newInstance() = PlaylistFragment().apply {}
     }
 }
