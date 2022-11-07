@@ -10,7 +10,7 @@
         android:id="@+id/playlistImage"
         android:layout_width="90dp"
         android:layout_height="90dp"
-        android:src="@drawable/assert_playlist_default"
+        android:src="@drawable/asset_playlist_default"
         android:scaleType="centerCrop"/>
 
     <LinearLayout

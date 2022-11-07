@@ -1,10 +1,10 @@
 package com.esaudev.tddworkshop.data
 
 import com.esaudev.tddworkshop.domain.model.Playlist
+import retrofit2.http.GET
 
 interface PlaylistApi {
 
-    suspend fun fetchAllPlaylists(): List<Playlist> {
-        TODO("Not yet implemented")
-    }
+    @GET("/playlist")
+    suspend fun fetchAllPlaylists(): List<Playlist>
 }

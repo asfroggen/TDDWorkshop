@@ -14,12 +14,25 @@ import com.esaudev.tddworkshop.data.PlaylistApi
 import com.esaudev.tddworkshop.data.PlaylistService
 import com.esaudev.tddworkshop.domain.PlaylistRepository
 import com.esaudev.tddworkshop.domain.model.Playlist
+import com.google.gson.Gson
+import okhttp3.OkHttpClient
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class PlaylistFragment : Fragment() {
 
     lateinit var viewModel: PlaylistViewModel
     lateinit var viewModelFactory: PlaylistViewModelFactory
-    private val service = PlaylistService(object : PlaylistApi {})
+
+    private val retrofit = Retrofit.Builder()
+        .baseUrl("http://10.0.2.2:3000/")
+        .client(OkHttpClient())
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+
+    private val api = retrofit.create(PlaylistApi::class.java)
+
+    private val service = PlaylistService(api)
     private val repository = PlaylistRepository(service)
 
     override fun onCreateView(

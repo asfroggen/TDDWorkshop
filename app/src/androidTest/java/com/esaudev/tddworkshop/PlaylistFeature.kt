@@ -19,7 +19,6 @@ import org.hamcrest.TypeSafeMatcher
 import org.junit.Test
 import org.junit.runner.RunWith
 
-import org.junit.Assert.*
 import org.junit.Rule
 
 @RunWith(AndroidJUnit4::class)
@@ -60,7 +59,7 @@ class PlaylistFeature {
                 withId(R.id.playlistImage), isDescendantOfA(nChildOf(withId(R.id.playlistList), 0))
             )
         )
-            .check(matches(withDrawable(R.drawable.assert_playlist_default)))
+            .check(matches(withDrawable(R.drawable.asset_playlist_default)))
             .check(matches(isDisplayed()))
     }
 

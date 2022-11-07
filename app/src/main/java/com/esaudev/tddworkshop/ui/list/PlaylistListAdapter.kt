@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.esaudev.tddworkshop.R
 import com.esaudev.tddworkshop.databinding.ItemPlaylistBinding
 import com.esaudev.tddworkshop.domain.model.Playlist
 
@@ -28,7 +29,7 @@ class PlaylistListAdapter(
         val item = values[position]
         holder.playlistName.text = item.name
         holder.playlistCategory.text = item.category
-        holder.playlistImage.setImageResource(item.image)
+        holder.playlistImage.setImageResource(R.drawable.asset_playlist_default)
     }
 
     override fun getItemCount(): Int = values.size
