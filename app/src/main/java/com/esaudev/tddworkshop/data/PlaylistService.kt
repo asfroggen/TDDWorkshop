@@ -4,8 +4,9 @@ import com.esaudev.tddworkshop.domain.model.Playlist
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
 
-class PlaylistService(
+class PlaylistService @Inject constructor (
     private val api: PlaylistApi
 ) {
 

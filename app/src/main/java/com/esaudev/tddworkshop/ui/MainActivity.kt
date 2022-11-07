@@ -5,7 +5,9 @@ import android.os.Bundle
 import com.esaudev.tddworkshop.R
 import com.esaudev.tddworkshop.databinding.ActivityMainBinding
 import com.esaudev.tddworkshop.ui.list.PlaylistFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding

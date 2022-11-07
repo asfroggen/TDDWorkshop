@@ -7,7 +7,9 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.esaudev.tddworkshop.R
 import com.esaudev.tddworkshop.data.PlaylistApi
@@ -15,33 +17,22 @@ import com.esaudev.tddworkshop.data.PlaylistService
 import com.esaudev.tddworkshop.domain.PlaylistRepository
 import com.esaudev.tddworkshop.domain.model.Playlist
 import com.google.gson.Gson
+import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class PlaylistFragment : Fragment() {
 
-    lateinit var viewModel: PlaylistViewModel
-    lateinit var viewModelFactory: PlaylistViewModelFactory
-
-    private val retrofit = Retrofit.Builder()
-        .baseUrl("http://10.0.2.2:3000/")
-        .client(OkHttpClient())
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-
-    private val api = retrofit.create(PlaylistApi::class.java)
-
-    private val service = PlaylistService(api)
-    private val repository = PlaylistRepository(service)
+    private val viewModel: PlaylistViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_playlists, container, false)
-
-        setupViewModel()
 
         viewModel.playlists.observe(this as LifecycleOwner) { playlists ->
             if (playlists.getOrNull() != null) {
@@ -64,10 +55,9 @@ class PlaylistFragment : Fragment() {
         }
     }
 
-    private fun setupViewModel() {
-        viewModelFactory = PlaylistViewModelFactory(repository)
+    /*private fun setupViewModel() {
         viewModel = ViewModelProvider(this, viewModelFactory)[PlaylistViewModel::class.java]
-    }
+    }*/
 
     companion object {
         @JvmStatic
