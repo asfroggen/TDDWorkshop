@@ -4,6 +4,7 @@ import com.esaudev.tddworkshop.domain.PlaylistRepository
 import com.esaudev.tddworkshop.domain.model.Playlist
 import com.esaudev.tddworkshop.ui.list.PlaylistViewModel
 import com.esaudev.tddworkshop.utils.BaseUnitTest
+import com.esaudev.tddworkshop.utils.captureValues
 import com.esaudev.tddworkshop.utils.getValueForTest
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.times
@@ -52,6 +53,39 @@ class PlaylistViewModelShould: BaseUnitTest() {
         val viewModel = mockFailureCase()
         advanceUntilIdle()
         assertEquals(expectedException, viewModel.playlists.getValueForTest()!!.exceptionOrNull())
+    }
+
+    @Test
+    fun `show loader while loading the playlists`() = runTest {
+        val viewModel = mockSuccessfulCase()
+
+        viewModel.loader.captureValues {
+            viewModel.playlists.getValueForTest()
+
+            assertEquals(true, values.first())
+        }
+    }
+
+    @Test
+    fun `close loader when playlist are ready`() = runTest {
+        val viewModel = mockSuccessfulCase()
+
+        viewModel.loader.captureValues {
+            viewModel.playlists.getValueForTest()
+            advanceUntilIdle()
+            assertEquals(false, values.last())
+        }
+    }
+
+    @Test
+    fun `close loader after network error`() = runTest {
+        val viewModel = mockFailureCase()
+
+        viewModel.loader.captureValues {
+            viewModel.playlists.getValueForTest()
+            advanceUntilIdle()
+            assertEquals(false, values.last())
+        }
     }
 
     private suspend fun mockSuccessfulCase(): PlaylistViewModel {

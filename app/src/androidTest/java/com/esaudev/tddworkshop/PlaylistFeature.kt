@@ -1,31 +1,37 @@
 package com.esaudev.tddworkshop
 
-import android.view.View
-import android.view.ViewGroup
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.*
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.rule.ActivityTestRule
 import com.adevinta.android.barista.assertion.BaristaRecyclerViewAssertions.assertRecyclerViewItemCount
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
+import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertNotDisplayed
 import com.adevinta.android.barista.internal.matcher.DrawableMatcher.Companion.withDrawable
 import com.esaudev.tddworkshop.ui.MainActivity
-import org.hamcrest.Description
-import org.hamcrest.Matcher
+import com.esaudev.tddworkshop.util.EspressoIdlingResource
 import org.hamcrest.Matchers.allOf
-import org.hamcrest.TypeSafeMatcher
-
+import org.junit.After
+import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
 
 import org.junit.Rule
 
-@RunWith(AndroidJUnit4::class)
-class PlaylistFeature {
+class PlaylistFeature: BaseUITest() {
 
     val mActivityRule = ActivityTestRule(MainActivity::class.java)
         @Rule get
+
+    @Before
+    fun setUp() {
+        IdlingRegistry.getInstance().register(EspressoIdlingResource.countingIdlingResource)
+    }
+
+    @After
+    fun tearDown() {
+        IdlingRegistry.getInstance().unregister(EspressoIdlingResource.countingIdlingResource)
+    }
 
     @Test
     fun displayScreenTitle() {
@@ -34,7 +40,6 @@ class PlaylistFeature {
 
     @Test
     fun displayListOfPlaylists() {
-        Thread.sleep(4000)
 
         assertRecyclerViewItemCount(R.id.playlistList, 10)
 
@@ -63,24 +68,15 @@ class PlaylistFeature {
             .check(matches(isDisplayed()))
     }
 
-    /**
-        Passing a parent view and then we are accessing the selected child position
-     */
-    private fun nChildOf(parentMatcher: Matcher<View>, childPosition: Int): Matcher<View> {
-        return object : TypeSafeMatcher<View>() {
-            override fun describeTo(description: Description) {
-                description.appendText("position $childPosition of parent")
-                parentMatcher.describeTo(description)
-            }
+    @Test
+    fun displayLoaderWhileFetchingPlaylists() {
+        IdlingRegistry.getInstance().unregister(EspressoIdlingResource.countingIdlingResource)
+        assertDisplayed(R.id.loader)
+    }
 
-            override fun matchesSafely(view: View): Boolean {
-                if (view.parent !is ViewGroup) return false
-                val parent = view.parent as ViewGroup
+    @Test
+    fun hideLoaderWhenPlaylistsReady() {
 
-                return (parentMatcher.matches(parent)
-                        && parent.childCount > childPosition
-                        && parent.getChildAt(childPosition) == view)
-            }
-        }
+        assertNotDisplayed(R.id.loader)
     }
 }
