@@ -1,4 +1,4 @@
-package com.esaudev.tddworkshop
+package com.esaudev.tddworkshop.playlist
 
 import com.esaudev.tddworkshop.data.PlaylistApi
 import com.esaudev.tddworkshop.data.PlaylistService

@@ -21,19 +21,6 @@ import org.junit.Rule
 
 class PlaylistFeature: BaseUITest() {
 
-    val mActivityRule = ActivityTestRule(MainActivity::class.java)
-        @Rule get
-
-    @Before
-    fun setUp() {
-        IdlingRegistry.getInstance().register(EspressoIdlingResource.countingIdlingResource)
-    }
-
-    @After
-    fun tearDown() {
-        IdlingRegistry.getInstance().unregister(EspressoIdlingResource.countingIdlingResource)
-    }
-
     @Test
     fun displayScreenTitle() {
         assertDisplayed("Playlists")

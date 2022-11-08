@@ -1,6 +1,7 @@
 package com.esaudev.tddworkshop.di
 
 import com.esaudev.tddworkshop.data.PlaylistApi
+import com.esaudev.tddworkshop.data.PlaylistDetailsApi
 import com.jakewharton.espresso.OkHttp3IdlingResource
 import dagger.Module
 import dagger.Provides
@@ -22,6 +23,12 @@ object AppModule {
     @Singleton
     fun providePlaylistApi(retrofit: Retrofit): PlaylistApi {
         return retrofit.create(PlaylistApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun providePlaylistDetailApi(retrofit: Retrofit): PlaylistDetailsApi {
+        return retrofit.create(PlaylistDetailsApi::class.java)
     }
 
     @Provides
